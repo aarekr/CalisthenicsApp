@@ -1,5 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+final router = GoRouter(
+  routes: [
+    GoRoute(path: '/', builder: (context, state) => HomeScreen()),
+    GoRoute(path: '/createtrainingsession', 
+            builder: (context, state) => CreateTrainingSessionScreen()),
+    GoRoute(path: '/summary', builder: (context, state) => SummaryScreen()),
+  ],
+);
+
+main() {
+  runApp(MaterialApp.router(routerConfig: router));
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Column(children: [
+                const Text("Chinup"),
+                const Text("Pullup"),
+                const Text("Dip"),
+                OutlinedButton(
+                  onPressed: () => print("adding an exercise"),
+                  child: const Text("Add exercise")),
+                ElevatedButton(
+                  onPressed: () => context.go("/createtrainingsession"),
+                  child: const Text("Create daily exercise plan"),
+                ),
+                ElevatedButton(
+                  onPressed: () => context.go("/summary"),
+                  child: const Text("End training session"),
+                ),
+    ]));
+  }
+}
+
+class CreateTrainingSessionScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Center(
+            child: Column(children: [
+              const Text("This screen is for creating an exercise session"),
+              ElevatedButton(
+                onPressed: () => context.go("/"),
+                child: const Text("Return to main screen"),
+              ),
+    ])));
+  }
+}
+
+class SummaryScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Center(
+            child: Column(children: [
+              const Text("This screen is for overviewing completed exercises of a training session"),
+              ElevatedButton(
+                onPressed: () => context.go("/"),
+                child: const Text("Return to main screen"),
+              ),
+    ])));
+  }
+}
+
+
+/*
 void main() {
   runApp(const CalisthenicsApp());
 }
@@ -60,3 +129,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+*/
