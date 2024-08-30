@@ -13,7 +13,7 @@ final router = GoRouter(
     GoRoute(path: '/createnewexercise', builder: (context, state) => CreateNewExerciseScreen()),
     GoRoute(path: '/createtrainingsession', 
             builder: (context, state) => CreateTrainingSessionScreen()),
-    GoRoute(path: '/summary', builder: (context, state) => SummaryScreen()),
+    GoRoute(path: '/summary', builder: (context, state) => EndTrainingScreen()),
   ],
 );
 
@@ -24,31 +24,45 @@ main() {
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final exerciseDIPstraightBar = Exercise("DIP straight bar", []);
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: const Center(child: Text("Calisthenics App")),
+        ),
         body: Column(children: [
-                Row(children: [const Text("CHINUP close grip"), ChinupWidget()],),
-                Row(children: [const Text("PULLUP close grip"), PullupWidget()],),
+                Row(mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => context.go("/createnewexercise"),
+                      child: const Text("Create a new exercise"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => context.go("/createtrainingsession"),
+                      child: const Text("Create training session"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => context.go("/summary"),
+                      child: const Text("End training session"),
+                    ),
+                  ],
+                ),
+                const Text("EXERCISES", style: TextStyle(fontSize: 32)),
+                Row(mainAxisAlignment: MainAxisAlignment.center,
+                  children: [const Text("CHINUP close grip"), ChinupWidget()],),
+                Row(mainAxisAlignment: MainAxisAlignment.center,
+                  children: [const Text("PULLUP close grip"), PullupWidget()],),
+                Row(mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Text(exerciseDIPstraightBar.name)],),
                 //const Text("PULLUP wide grip"),
                 //const Text("DIP bar 1", textAlign: TextAlign.left),
                 //const Text("DIP bar 2"),
-                OutlinedButton(
-                  onPressed: () => print("adding an exercise"),
-                  child: const Text("Add exercise")),
-                ElevatedButton(
-                  onPressed: () => context.go("/createnewexercise"),
-                  child: const Text("Create a new exercise"),
-                ),
-                ElevatedButton(
-                  onPressed: () => context.go("/createtrainingsession"),
-                  child: const Text("Create training session"),
-                ),
-                ElevatedButton(
-                  onPressed: () => context.go("/summary"),
-                  child: const Text("End training session"),
-                ),
                 ListWidget(),
                 AddButton(),
-                //Row(children: [ChinupWidget()]),
+                const OutlinedButton(
+                  onPressed: null,
+                  child: Text("Add exercise")
+                ),
     ]));
   }
 }
@@ -107,12 +121,45 @@ class PullupWidget extends ConsumerWidget {
 
 // screens
 class CreateNewExerciseScreen extends StatelessWidget {
+  addNewExercise() {
+    print("adding new exercise");
+    String newEx = "new ex";
+    exerciseList.add(newEx);
+  }
   @override
   Widget build(BuildContext context) {
+    final exerciseDIP = Exercise("DIP", [dipProvider1]);  // using class Exercise below
+    final newExerciseField = SizedBox(
+      width: 250, 
+      child: TextFormField(decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        hintText: 'exercise name...',
+        isDense: true, 
+        contentPadding: EdgeInsets.all(10),
+      ))
+    );
+    final exerciseForm = Form(child: newExerciseField);
+    final addExerciseButton = ElevatedButton(
+      onPressed: addNewExercise,
+      child: const Text('Add'),
+    );
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: const Center(child: Text("Calisthenics App")),
+        ),
         body: Center(
             child: Column(children: [
               const Text("This screen is for creating new exercises"),
+              const Text("Existing exercises:"),
+              Text(exerciseList[0]),  //data.map((e) => Text(e)).toList()
+              Text(exerciseList[1]),
+              exerciseList.length > 2 ? Text(exerciseList[2]) : const Text(""),
+              exerciseList.length > 3 ? Text(exerciseList[3]) : const Text(""),
+              Text(exerciseDIP.name),  // displays exercise name
+              // create input field and add button
+              exerciseForm,
+              addExerciseButton,
               ElevatedButton(
                 onPressed: () => context.go("/"),
                 child: const Text("Return to main screen"),
@@ -121,10 +168,20 @@ class CreateNewExerciseScreen extends StatelessWidget {
   }
 }
 
+class Exercise {
+  String name;
+  List<dynamic>reps;
+  Exercise(this.name, this.reps);
+}
+
 class CreateTrainingSessionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: const Center(child: Text("Calisthenics App")),
+        ),
         body: Center(
             child: Column(children: [
               const Text("This screen is for creating an exercise session"),
@@ -136,10 +193,14 @@ class CreateTrainingSessionScreen extends StatelessWidget {
   }
 }
 
-class SummaryScreen extends StatelessWidget {
+class EndTrainingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: const Center(child: Text("Calisthenics App")),
+        ),
         body: Center(
             child: Column(children: [
               const Text("This screen is for overviewing completed exercises of a training session"),

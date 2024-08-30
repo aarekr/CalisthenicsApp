@@ -6,3 +6,4 @@ final chinupProvider3 = StateProvider<int>((ref) => 0);
 final pullupProvider1 = StateProvider<int>((ref) => 0);
 final pullupProvider2 = StateProvider<int>((ref) => 0);
 final pullupProvider3 = StateProvider<int>((ref) => 0);
+final dipProvider1 = StateProvider<int>((ref) => 0);
